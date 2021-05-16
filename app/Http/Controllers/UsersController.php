@@ -63,28 +63,6 @@ class UsersController extends Controller
         }
     }
 
-    public function updateEmail(Request $request, User $user, $id)
-    {
-        $request->validate([
-            'email' => 'required|emailunique:users',
-        ]);
-
-        $user = $user::findOrFail($id);
-
-        $user->update([
-            'email' => $request->email,
-            'email_verified_at' => null
-        ]);
-
-        if ($user->save()) {
-            event(new Registered($user));
-            return response()->json([
-                'message' => 'User email updated.',
-                'model' => new UserResource($user)
-            ]);
-        }
-    }
-
     public function updatePassword(Request $request, User $user, $id)
     {
         $request->validate([

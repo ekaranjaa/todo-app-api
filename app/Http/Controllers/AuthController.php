@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -94,28 +95,6 @@ class AuthController extends Controller
         }
     }
 
-    public function updateEmail(Request $request, User $user)
-    {
-        $request->validate([
-            'email' => 'required|email|unique:users'
-        ]);
-
-        $user = $user::findOrFail($request->user()->id);
-
-        $user->update([
-            'email' => $request->email,
-            'email_verified_at' => null
-        ]);
-
-        if ($user->save()) {
-            event(new Registered($user));
-            return response()->json([
-                'message' => 'Email updated.',
-                'model' => new UserResource($user)
-            ]);
-        }
-    }
-
     public function updatePassword(Request $request, User $user)
     {
         $request->validate([
@@ -137,6 +116,23 @@ class AuthController extends Controller
 
         if ($user->save()) {
             return response()->json(['message' => 'Password changed.']);
+        }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json(['message' => __($status)]);
+        } else {
+            throw ValidationException::withMessages([
+                'email' => [__($status)],
+            ]);
         }
     }
 
