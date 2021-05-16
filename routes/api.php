@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\TodosController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -23,11 +24,14 @@ Route::prefix('email')->group(function () {
     })->middleware('throttle:6,1')->name('verification.send');
 });
 
+Route::prefix('guest')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::get('auth/google', [GoogleAuthController::class, 'authenticate']);
+    Route::get('auth/google-callback', [GoogleAuthController::class, 'callback']);
+});
+
 Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login'])
-        ->withoutMiddleware('auth:sanctum');
-    Route::post('register', [AuthController::class, 'register'])
-        ->withoutMiddleware('auth:sanctum');
     Route::get('user', [AuthController::class, 'index']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::put('/', [AuthController::class, 'update']);
