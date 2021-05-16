@@ -18,7 +18,7 @@ class CreateTodosTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('memo')->nullable();
-            $table->boolean('completed');
+            $table->boolean('completed')->nullable();
             $table->boolean('pinned')->nullable();
             $table->timestamps();
 

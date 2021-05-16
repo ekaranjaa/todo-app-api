@@ -97,7 +97,7 @@ class AuthController extends Controller
     public function updateEmail(Request $request, User $user)
     {
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|email|unique:users'
         ]);
 
         $user = $user::findOrFail($request->user()->id);

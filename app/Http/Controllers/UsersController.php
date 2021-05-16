@@ -14,7 +14,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = UserResource::collection(
-            User::with(['role', 'availability', 'tasks'])->paginate(50)
+            User::with(['todos'])->paginate(50)
         );
 
         return $users;
@@ -66,7 +66,7 @@ class UsersController extends Controller
     public function updateEmail(Request $request, User $user, $id)
     {
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|emailunique:users',
         ]);
 
         $user = $user::findOrFail($id);

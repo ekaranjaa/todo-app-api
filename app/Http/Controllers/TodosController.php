@@ -20,15 +20,15 @@ class TodosController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:tasks',
-            'memo' => 'required'
+            'title' => 'required'
         ]);
 
         $todo = new Todo([
             'user_id' => $request->user()->id,
             'title' => $request->title,
             'memo' => $request->memo,
-            'completed' => false
+            'completed' => false,
+            'pinned' => false
         ]);
 
         if ($todo->save()) {
@@ -42,8 +42,7 @@ class TodosController extends Controller
     public function update(Request $request, Todo $todo, $id)
     {
         $request->validate([
-            'title' => 'required|unique:tasks',
-            'memo' => 'required'
+            'title' => 'required'
         ]);
 
         $todo = $todo::findOrFail($id);
