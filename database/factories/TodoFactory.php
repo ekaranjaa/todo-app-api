@@ -23,9 +23,10 @@ class TodoFactory extends Factory
     {
         return [
             'title' => $this->faker->text(40),
-            'memo' => $this->faker->text(),
+            'memo' => $this->faker->text(100),
             'completed' => $this->faker->boolean(),
-            'pinned' => $this->faker->boolean(10)
+            'pinned' => $this->faker->boolean(20),
+            'created_at' => $this->faker->dateTimeBetween('-60 days')
         ];
     }
 }

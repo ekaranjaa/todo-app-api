@@ -14,7 +14,8 @@ class Todo extends Model
         'title',
         'memo',
         'completed',
-        'pinned'
+        'pinned',
+        'created_at'
     ];
 
     public function user()
