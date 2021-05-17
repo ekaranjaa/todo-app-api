@@ -22,7 +22,7 @@ class GoogleAuthController extends Controller
 
     private function createUser($user)
     {
-        $user = User::firstOrCreate([
+        $user = User::updateOrCreate([
             'email' => $user['email']
         ], [
             'name' => $user['name'],
@@ -35,6 +35,6 @@ class GoogleAuthController extends Controller
 
         $token = $user->createToken($user['email'])->plainTextToken;
 
-        return redirect(env('CLIENT_APP_URL') . '/callback?token=' . $token);
+        return redirect(env('CLIENT_APP_URL', 'http://localhost:8000') . '/callback?token=' . $token);
     }
 }
