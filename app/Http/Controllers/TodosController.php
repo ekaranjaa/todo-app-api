@@ -17,6 +17,28 @@ class TodosController extends Controller
         return $todos;
     }
 
+    public function getDaily(Request $request, $date)
+    {
+        $todos = Todo::where('user_id', $request->user()->id)
+            ->whereDate('created_at', $date)
+            ->paginate(50);
+
+        $todos = TodoResource::collection($todos);
+
+        return $todos;
+    }
+
+    public function getWeekly(Request $request, $from, $to)
+    {
+        $todos = Todo::where('user_id', $request->user()->id)
+            ->whereBetween('created_at', [$from, $to])
+            ->paginate(50);
+
+        $todos = TodoResource::collection($todos);
+
+        return $todos;
+    }
+
     public function create(Request $request)
     {
         $request->validate([

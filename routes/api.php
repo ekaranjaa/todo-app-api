@@ -42,6 +42,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('users')->group(function
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('todos')->group(function () {
     Route::get('/', [TodosController::class, 'index']);
+    Route::get('daily/{date}', [TodosController::class, 'getDaily']);
+    Route::get('weekly/{from}/{to}', [TodosController::class, 'getWeekly']);
     Route::post('/', [TodosController::class, 'create']);
     Route::put('/{id}', [TodosController::class, 'update']);
     Route::put('/pinned-status/{id}', [TodosController::class, 'updatePinnedStatus']);
